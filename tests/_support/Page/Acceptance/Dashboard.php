@@ -7,6 +7,8 @@ class Dashboard
     // include url of current page
     public static $URL = '/s/dashboard';
 
+    public static $ContactPage = '//span[text()="Contacts"]';
+
     /**
      * Declare UI map for this page here. CSS or XPath allowed.
      * public static $usernameField = '#username';
