@@ -56,6 +56,36 @@ class ContactsDataObjects
         unset($this->contact['lead[website]']);
     }
 
+    public function verifyContact(\AcceptanceTester $I, $state, $country)
+    {
+        foreach ($this->contact as $key => $data) {
+            $I->canSee($data);
+        }
+        $I->canSee($this->company['company[companyname]']);
+        $I->canSee($state);
+        $I->canSee($country);
+    }
+    public function verifyContactSocial(\AcceptanceTester $I)
+    {
+        foreach ($this->social as $key => $data) {
+            $I->canSee($data);
+        }
+    }
+
+    public function verifyContactCompany(\AcceptanceTester $I, $state, $country)
+    {
+        foreach ($this->company as $key => $data) {
+            if ($key == 'company[companywebsite]') {
+                $text = (substr($data, 0, 5) != 'http:') ? 'http://'.$data : $data;
+                $I->canSeeInField($key,  $text);
+            } else {
+                $I->canSeeInField($key, $data);
+            }
+        }
+        $I->canSee($state);
+        $I->canSee($country);
+    }
+
     public function fillContact(\AcceptanceTester $I, $state, $country)
     {
         foreach ($this->contact as $key => $data) {
@@ -81,11 +111,7 @@ class ContactsDataObjects
         $this->fillContactCompanyCountry($I, $country);
     }
 
-    /**
-     * @param \AcceptanceTester $I
-     * @param $state
-     */
-    public function fillContactState(\AcceptanceTester $I, $state)
+    private function fillContactState(\AcceptanceTester $I, $state)
     {
         Debug::debug($this->contactPageObject);
         if (isset($state)) {
@@ -103,10 +129,6 @@ class ContactsDataObjects
         }
     }
 
-    /**
-     * @param \AcceptanceTester $I
-     * @param $country
-     */
     private function fillContactCountry(\AcceptanceTester $I, $country)
     {
         if (isset($country)) {
@@ -115,10 +137,6 @@ class ContactsDataObjects
         }
     }
 
-    /**
-     * @param \AcceptanceTester $I
-     * @param $state
-     */
     private function fillContactCompanyState(\AcceptanceTester $I, $state)
     {
         if (isset($state)) {
@@ -135,10 +153,6 @@ class ContactsDataObjects
         }
     }
 
-    /**
-     * @param \AcceptanceTester $I
-     * @param $country
-     */
     private function fillContactCompanyCountry(\AcceptanceTester $I, $country)
     {
         if (isset($country)) {

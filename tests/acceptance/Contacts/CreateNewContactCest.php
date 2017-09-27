@@ -51,30 +51,15 @@ class CreateNewContactCest
         $I->amOnPage('s/contacts/view/1');
         $I->waitForText('Engagements');
         $I->click('//a[@data-target="#lead-details"]');
-        $I->canSee('Mr.');
-        $I->canSee('New Button');
-        $I->canSee('Contact');
-        $I->canSee('newbuttoncontact@mailinator.com');
-        $I->canSee('CTO');
-        $I->canSee('Contact Address line 1');
-        $I->canSee('Contact Address line 2');
-        $I->canSee('Orlando');
-        $I->canSee('33195');
-        $I->canSee('150');
-        $I->canSee('3059999999');
-        $I->canSee('3058888888');
-        $I->canSee('0 points');
-        $I->canSee('3057777777');
-        $I->canSee('www.newbuttoncontact.com');
+
+        $newContact->verifyContact($I, 'Florida', 'United States');
         $I->click('//a[@href="#social"]');
         $I->waitForText('Facebook');
-        $I->canSee('fb.com');
-        $I->canSee('f4.com');
-        $I->canSee('gplus.com');
-        $I->canSee('ig.com');
-        $I->canSee('lnk.com');
-        $I->canSee('skype.com');
-        $I->canSee('twt.com');
+        $newContact->verifyContactSocial($I);
+
+        $I->amOnPage('s/companies/edit/1');
+        $I->waitForText('Edit Company');
+        $newContact->verifyContactCompany($I, 'California', 'United States');
     }
     public function TryCompany(AcceptanceTester $I)
     {
