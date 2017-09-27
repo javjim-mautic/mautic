@@ -1,6 +1,6 @@
 <?php
 
-use Page\Acceptance\Dashboard as DashboardPage;
+use Page\Acceptance\DashboardPage as DashboardPage;
 use Page\Acceptance\Login as LoginPage;
 
 $I = new AcceptanceTester($scenario);

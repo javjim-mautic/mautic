@@ -2,7 +2,7 @@
 
 namespace Page\Acceptance;
 
-class Dashboard
+class DashboardPage
 {
     // include url of current page
     public static $URL = '/s/dashboard';

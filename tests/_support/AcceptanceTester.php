@@ -1,6 +1,6 @@
 <?php
 
-use Page\Acceptance\Dashboard as DashboardPage;
+use Page\Acceptance\DashboardPage;
 use Page\Acceptance\Login as LoginPage;
 
 /**
