@@ -50,18 +50,46 @@ class ContactsDataObjects
             'company[companyphone]'              => '3055555555',
             'company[companywebsite]'            => 'www.newbuttoncompany.com', ];
     }
+    public function _2NoCompany()
+    {
+        $this->contact = [
+            'lead[title]'     => 'Mrs.',
+            'lead[firstname]' => 'No Company',
+            'lead[lastname]'  => 'Contact',
+            'lead[email]'     => 'nocompanycontact@mailinator.com',
+            'lead[position]'  => 'CPA',
+            'lead[address1]'  => 'ABC Lane 1',
+            'lead[address2]'  => 'ABC Lane 2',
+            'lead[city]'      => 'Faux',
+            'lead[zipcode]'   => '33198',
+            'lead[mobile]'    => '3059999998',
+            'lead[phone]'     => '3058888887',
+            'lead[fax]'       => '3057777776',
+            'lead[website]'   => 'www.nocompanycontact.com',
+            'lead[points]'    => '10',
+        ];
+        $this->company = null;
+    }
 
     public function noWebsiteContact()
     {
         unset($this->contact['lead[website]']);
     }
 
-    public function verifyContact(\AcceptanceTester $I, $state, $country)
+    public function verifyContact(\AcceptanceTester $I, $state, $country, $primaryCompany)
     {
         foreach ($this->contact as $key => $data) {
             $I->canSee($data);
         }
-        $I->canSee($this->company['company[companyname]']);
+        if ($this->company != null) {
+            $I->canSee($this->company['company[companyname]']);
+            if ($primaryCompany) {
+                $I->assertEquals($I->grabAttributeFrom('//*[@id="company-1"]', 'class'), 'fa fa-check primary');
+            } else {
+                $I->assertEquals($I->grabAttributeFrom('//*[@id="company-1"]', 'class'), 'fa fa-check');
+            }
+        }
+
         $I->canSee($state);
         $I->canSee($country);
     }

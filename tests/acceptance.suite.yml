@@ -7,6 +7,7 @@ modules:
         - WebDriver:
              url: https://mautic.local
              browser: chrome
+             wait: 5
         - \Helper\Acceptance
         - Db:
              dsn: 'mysql:host=localhost;dbname=mautic'
@@ -14,6 +15,8 @@ modules:
              password: 'root123'
              dump: 'tests/_data/initialUser.sql'
              populate: true
-             cleanup: true
+             cleanup: false
              #reconnect: true
+        - Asserts:
+
 
