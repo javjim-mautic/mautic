@@ -50,7 +50,7 @@ class ContactsDataObjects
             'company[companyphone]'              => '3055555555',
             'company[companywebsite]'            => 'www.newbuttoncompany.com', ];
     }
-    public function _2NoCompany()
+    public function _2NoCompany10Points()
     {
         $this->contact = [
             'lead[title]'     => 'Mrs.',
@@ -71,12 +71,106 @@ class ContactsDataObjects
         $this->company = null;
     }
 
+    public function _3ExistingCompany()
+    {
+        $this->contact = [
+            'lead[title]'     => 'Mr.',
+            'lead[firstname]' => 'Existing Company',
+            'lead[lastname]'  => 'Jones',
+            'lead[email]'     => 'existingcompany@mailinator.com',
+            'lead[position]'  => 'ABC',
+            'lead[address1]'  => 'ABC Lane 1',
+            'lead[address2]'  => 'ABC Lane 2',
+            'lead[city]'      => 'Faux',
+            'lead[zipcode]'   => '33198',
+            'lead[mobile]'    => '3059999998',
+            'lead[phone]'     => '3058888887',
+            'lead[fax]'       => '3057777776',
+            'lead[website]'   => 'www.existingcompanycontact.com',
+            'lead[points]'    => '0',
+        ];
+        $this->company = ['company[companyname]' => 'New Button Company'];
+    }
+
+    public function verifyImportContacts(\AcceptanceTester $I)
+    {
+        $I->amGoingTo('Verify all contacts and companies are created');
+        $this->verifyContactCSV($I, 4, 'Stern', 'Caddie', 'scaddie0@theglobeandmail.com', 'Voonix', 2);
+        $this->verifyContactCSV($I, 5, 'Lalo', 'Santore', '', 'Blognation', 3);
+        $this->verifyContactCSV($I, 6, 'Edward', '', '', 'Thoughtblab', 4);
+        $this->verifyContactCSV($I, 7, '', '', '', 'Kaymbo', 5);
+        $this->verifyContactCSV($I, 8, 'Diandra', '', 'dmoncrieffe4@mediafire.com', 'Vipe', 6);
+        $this->verifyContactCSV($I, 9, '', 'Louden', 'wlouden5@house.gov', 'Jaxspan', 7);
+        $this->verifyContactCSV($I, 10, '', '', 'laubery6@w3.org', 'Shuffledrive', 8);
+        $this->verifyContactCSV($I, 11, 'Minnnie', 'Drinkhall', 'mdrinkhall7@earthlink.net', '', '');
+        $this->verifyContactCSV($I, 12, 'Lari', 'Frankling', '', '', '');
+        $this->verifyContactCSV($I, 13, 'Walden', '', '', '', '');
+        $this->verifyContactCSV($I, 14, 'Sheppard', '', 'smacdermida@goodreads.com', '', '');
+        $this->verifyContactCSV($I, 15, '', 'Osgardby', 'cosgardbyb@mysql.com', '', '');
+        $this->verifyContactCSV($I, 16, '', '', 'fbaackc@pagesperso-orange.fr', '', '');
+        $this->verifyContactCSV($I, 17, 'Carolyn', 'Ivannikov', 'civannikovd@boston.com', 'Tavu', 9);
+        $this->verifyContactCSV($I, 18, 'Linoel', 'Jee', 'ljeee@people.com.cn', 'Meemm', 10);
+        $this->verifyContactCSV($I, 19, 'Dorice', 'Wahner', 'dwahnerf@who.int', '', '');
+        $this->verifyContactCSV($I, 20, 'Keene', 'Wenzel', 'kwenzelg@virginia.edu', '', '');
+        $this->verifyContactCSV($I, 21, 'Zola', 'Cattemull', 'zcattemullh@pagesperso-orange.fr', '', '');
+        $this->verifyContactCSV($I, 22, 'Felizio', 'Hurich', 'fhurichi@com.com', 'Blogspan', 11);
+        $this->verifyContactCSV($I, 23, 'Jahn', 'Duck', 'dduck@bloggy.com', 'Blognation', 3);
+
+        $this->verifyCompaniesCSV($I, 2, 'Voonix', 'scaddie0@zdnet.com', 'http://statcounter.com');
+        $this->verifyCompaniesCSV($I, 3, 'Blognation', 'johnny@blognation.com', 'http://columbia.edu');
+        $this->verifyCompaniesCSV($I, 4, 'Thoughtblab', 'ewardington2@imdb.com', 'https://gizmodo.com');
+        $this->verifyCompaniesCSV($I, 5, 'Kaymbo', 'amagor3@stanford.edu', 'https://multiply.com');
+        $this->verifyCompaniesCSV($I, 6, 'Vipe', 'dmoncrieffe4@prnewswire.com', 'http://hexun.com');
+        $this->verifyCompaniesCSV($I, 7, 'Jaxspan', 'wlouden5@google.ru', 'https://google.pl');
+        $this->verifyCompaniesCSV($I, 8, 'Shuffledrive', 'laubery6@prnewswire.com', 'https://unicef.org');
+        $this->verifyCompaniesCSV($I, 9, 'Tavu', 'civannikovd@dion.ne.jp', '');
+        $this->verifyCompaniesCSV($I, 10, 'Meemm', '', '');
+        //$this->verifyCompaniesCSV($I,11,'','dwahnerf@java.com','http://printfriendly.com');
+        //$this->verifyCompaniesCSV($I,11,'','kwenzelg@google.ca','');
+        //$this->verifyCompaniesCSV($I,11,'','','http://vinaora.com');
+        $this->verifyCompaniesCSV($I, 11, 'Blogspan', '', '	https://51.la');
+    }
+
+    public function verifyContactCSV(\AcceptanceTester $I, $id, $first, $last, $email, $company, $companyId)
+    {
+        $I->amOnPage('s/contacts/view/'.$id);
+        $I->waitForText('Engagements');
+        if ($first != '') {
+            $I->canSee($first);
+        }
+        if ($last != '') {
+            $I->canSee($last);
+        }
+        if ($email != '') {
+            $I->canSee($email);
+        }
+        if ($company != '') {
+            $I->canSee($company);
+            $I->assertEquals($I->grabAttributeFrom('//*[@id="company-'.$companyId.'"]', 'class'), 'fa fa-check primary');
+        }
+    }
+
+    public function verifyCompaniesCSV(\AcceptanceTester $I, $id, $name, $email, $website)
+    {
+        $I->amOnPage('s/companies/edit/'.$id);
+        if ($name != '') {
+            $I->canSeeInField('company[companyname]', $name);
+        }
+        if ($email != '') {
+            $I->canSeeInField('company[companyemail]', $email);
+        }
+        if ($website != '') {
+            $text = (substr($website, 0, 5) != 'http:') ? 'http://'.$website : $website;
+            $I->canSeeInField('company[companywebsite]',  $text);
+        }
+    }
+
     public function noWebsiteContact()
     {
         unset($this->contact['lead[website]']);
     }
 
-    public function verifyContact(\AcceptanceTester $I, $state, $country, $primaryCompany)
+    public function verifyContact(\AcceptanceTester $I, $state, $country, $primaryCompany, $companyId)
     {
         foreach ($this->contact as $key => $data) {
             $I->canSee($data);
@@ -84,15 +178,16 @@ class ContactsDataObjects
         if ($this->company != null) {
             $I->canSee($this->company['company[companyname]']);
             if ($primaryCompany) {
-                $I->assertEquals($I->grabAttributeFrom('//*[@id="company-1"]', 'class'), 'fa fa-check primary');
+                $I->assertEquals($I->grabAttributeFrom('//*[@id="company-'.$companyId.'"]', 'class'), 'fa fa-check primary');
             } else {
-                $I->assertEquals($I->grabAttributeFrom('//*[@id="company-1"]', 'class'), 'fa fa-check');
+                $I->assertEquals($I->grabAttributeFrom('//*[@id="company-'.$companyId.'"]', 'class'), 'fa fa-check');
             }
         }
 
         $I->canSee($state);
         $I->canSee($country);
     }
+
     public function verifyContactSocial(\AcceptanceTester $I)
     {
         foreach ($this->social as $key => $data) {

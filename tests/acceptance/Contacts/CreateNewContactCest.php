@@ -55,7 +55,7 @@ class CreateNewContactCest
         $I->amOnPage('s/contacts/view/1');
         $I->waitForText('Engagements');
         $I->click('//a[@data-target="#lead-details"]');
-        $newContact->verifyContact($I, 'Florida', 'United States', true);
+        $newContact->verifyContact($I, 'Florida', 'United States', true, 1);
 
         $I->amGoingTo(' Verify data in Social is correct');
         $I->click('//a[@href="#social"]');
@@ -67,9 +67,9 @@ class CreateNewContactCest
         $I->waitForText('Edit Company');
         $newContact->verifyContactCompany($I, 'California', 'United States');
     }
-    public function CreateAContactNoCompany(AcceptanceTester $I)
+    public function CreateAContactNoCompany10Points(AcceptanceTester $I)
     {
-        $I->wantTo('Create a contact with all fields and no company from new button points not set up');
+        $I->wantTo('Create a contact with all fields and no company from new button with 10 points set up');
         $I->amGoingTo('Open Contacts and click on create new');
         $I->amOnPage(DashboardPage::$URL);
         $I->click(DashboardPage::$ContactPage);
@@ -79,7 +79,7 @@ class CreateNewContactCest
 
         $I->amGoingTo('Fill Contact core data');
         $newContact = new ContactsDataObjects();
-        $newContact->_2NoCompany();
+        $newContact->_2NoCompany10Points();
         $newContact->fillContact($I, 'FL', 'US');
         $I->wait(5);
         $I->click($this->contactPageObjects['saveCloseButton']);
@@ -89,6 +89,58 @@ class CreateNewContactCest
         $I->amOnPage('s/contacts/view/2');
         $I->waitForText('Engagements');
         $I->click('//a[@data-target="#lead-details"]');
-        $newContact->verifyContact($I, 'Florida', 'United States', null);
+        $newContact->verifyContact($I, 'Florida', 'United States', null, null);
+    }
+
+    public function CreateAContactWithExistingCompany(AcceptanceTester $I)
+    {
+        $I->wantTo('Create a contact with existing company');
+
+        $I->amGoingTo('Open Contacts and click on create new');
+        $I->amOnPage(DashboardPage::$URL);
+        $I->click(DashboardPage::$ContactPage);
+        $I->amOnPage('/s/contacts');
+        $I->click($this->contactPageObjects['newButton']);
+        $I->amOnPage(NewContactPage::$URL);
+
+        $I->amGoingTo('Fill Contact Data');
+        $newContact = new ContactsDataObjects();
+        $newContact->_3ExistingCompany();
+        $newContact->fillContact($I, 'FL', 'US');
+
+        $I->amGoingTo('Select "New Button Company"');
+        $I->click($this->contactPageObjects['companyField']);
+        $I->click(str_replace('$', '2', $this->contactPageObjects['contactCompanyOption']));
+        $I->wait(5);
+        $I->click($this->contactPageObjects['saveCloseButton']);
+
+        $I->amGoingTo('Review all data contact core data is saved correctly with 0 points and Existing Company is primary');
+        $I->wait(5);
+        $I->amOnPage('s/contacts/view/3');
+        $I->waitForText('Engagements');
+        $I->click('//a[@data-target="#lead-details"]');
+        $newContact->verifyContact($I, 'Florida', 'United States', true, 1);
+    }
+
+    public function ImportContactsFromCsv(AcceptanceTester $I)
+    {
+        $I->wantTo('Create contacts and companies by importing a CSV');
+
+        $I->amGoingTo('Open Contacts and click on create new');
+        $I->amOnPage(DashboardPage::$URL);
+        $I->click(DashboardPage::$ContactPage);
+        $I->amOnPage('/s/contacts');
+        $I->click($this->contactPageObjects['dropdownMenu']);
+        $I->click($this->contactPageObjects['importButton']);
+        $I->waitForText('Import');
+        $I->attachFile('lead_import[file]', 'importcompany.csv');
+        $I->click('lead_import[start]');
+        $I->waitForText('Import contacts');
+        $I->click('//*[@id="lead_field_import_buttons_save_toolbar"]');
+        $I->wait(15);
+        $I->canSee('Success');
+        $I->canSee('20 created,');
+        $newContact = new ContactsDataObjects();
+        $newContact->verifyImportContacts($I);
     }
 }
