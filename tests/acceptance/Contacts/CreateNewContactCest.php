@@ -3,6 +3,7 @@
 use DataObjects\Contacts\ContactsDataObjects;
 use Page\Acceptance\DashboardPage;
 use Page\Acceptance\NewContactPage;
+use Codeception\Module\Cli;
 
 class CreateNewContactCest
 {
@@ -34,6 +35,7 @@ class CreateNewContactCest
 
         $I->amGoingTo('Fill Contact Social Data');
         $I->click('Social');
+        $I->wait(3);
         $I->waitForText('Facebook');
         $newContact->fillContactSocial($I);
 
@@ -143,4 +145,45 @@ class CreateNewContactCest
         $newContact = new ContactsDataObjects();
         $newContact->verifyImportContacts($I);
     }
+
+    public function filterContacts(AcceptanceTester $I){
+        $I->wantTo('Use filters to find contacts');
+        $I->amOnPage('s/contacts');
+        $I->fillField('//*[@id="list-search"]','Contact');
+        $I->wait(4);
+        $I->canSee('New Button Contact');
+        $I->canSee('No Company Contact');
+        $I->canSee('2 items,');
+    }
+
+    public function changeSegment(AcceptanceTester $I){
+        $I->wantTo('Change a contacts segment');
+        $I->amOnPage('/s/contacts');
+        $I->checkOption('cb1');
+        $I->checkOption('cb2');
+        $I->click('//*[@id="leadTable"]/thead/tr/th[1]/div/div/button/i');
+        $I->click('Change Segments');
+        $I->click('//*[@id="lead_batch_add_chosen"]/ul');
+        $I->click('//*[@id="lead_batch_add_chosen"]/div/ul/li[2]');
+        $I->wait(3);
+        $I->click('//*[@id="MauticSharedModal"]/div/div/div[3]/div/button[2]');
+        $I->runShellCommand('php app/console mautic:segments:update');
+        $I->wait(12);
+        $I->click(DashboardPage::$SegmentsPage);
+        $I->waitForText('Contact Segments');
+        $I->click('View 2 Contacts');
+        $I->wait(3);
+        $I->canSee('New Button Contact');
+        $I->canSee('No Company Contact');
+
+    }
+
+    public function  changeCampaign(AcceptanceTester $I){
+         $I->wantTo("Change a contacts campaign");
+         
+    }
+
+
+
+
 }

@@ -1,22 +1,21 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        #- PhpBrowser:
-#            url: https://mautic.local
-#        - \Helper\Acceptance
         - WebDriver:
-             url: https://mautic.local
+             url: '%MAUTIC_URL%'
              browser: chrome
              wait: 5
         - \Helper\Acceptance
         - Db:
-             dsn: 'mysql:host=localhost;dbname=mautic'
-             user: 'root'
-             password: 'root123'
-             dump: 'tests/_data/initialUser.sql'
+             dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
+             user: '%DB_USER%'
+             password: '%DB_PASSWD%'
+             dump: 'tests/_data/Contacts.sql'
              populate: true
              cleanup: false
              #reconnect: true
         - Asserts:
+        - Cli:
+
 
 

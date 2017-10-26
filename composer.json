@@ -107,7 +107,8 @@
         "lightsaml/sp-bundle": "~1.0.3",
         "symfony/expression-language": "~2.8",
         "egeloen/ordered-form-bundle": "^3.0",
-        "symfony/dotenv": "^3.3"
+        "symfony/dotenv": "^3.3",
+        "vlucas/phpdotenv": "^2.4"
     },
     "require-dev": {
         "symfony/web-profiler-bundle": "~2.8",

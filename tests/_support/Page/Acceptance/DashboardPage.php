@@ -8,6 +8,7 @@ class DashboardPage
     public static $URL = '/s/dashboard';
 
     public static $ContactPage = '//span[text()="Contacts"]';
+    public static $SegmentsPage = '//span[text()="Segments"]';
 
     /**
      * Declare UI map for this page here. CSS or XPath allowed.

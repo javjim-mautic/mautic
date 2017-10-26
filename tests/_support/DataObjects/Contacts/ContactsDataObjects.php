@@ -31,13 +31,12 @@ class ContactsDataObjects
             'lead[phone]'       => '3058888888',
             'lead[fax]'         => '3057777777',
             'lead[website]'     => 'www.newbuttoncontact.com',
-            'lead[points]'      => '0',
+
         ];
         $this->social = ['lead[facebook]' => 'fb.com',
             'lead[foursquare]'            => 'f4.com',
             'lead[googleplus]'            => 'gplus.com',
             'lead[instagram]'             => 'ig.com',
-            'lead[linkedin]'              => 'lnk.com',
             'lead[skype]'                 => 'skype.com',
             'lead[twitter]'               => 'twt.com', ];
 
@@ -48,7 +47,8 @@ class ContactsDataObjects
             'company[companycity]'               => 'Miami',
             'company[companyzipcode]'            => '33178',
             'company[companyphone]'              => '3055555555',
-            'company[companywebsite]'            => 'www.newbuttoncompany.com', ];
+            'company[companywebsite]'            => 'www.newbuttoncompany.com',
+            'company[companystate]'              => 'California'];
     }
     public function _2NoCompany10Points()
     {
@@ -87,7 +87,7 @@ class ContactsDataObjects
             'lead[phone]'     => '3058888887',
             'lead[fax]'       => '3057777776',
             'lead[website]'   => 'www.existingcompanycontact.com',
-            'lead[points]'    => '0',
+
         ];
         $this->company = ['company[companyname]' => 'New Button Company'];
     }
@@ -118,17 +118,14 @@ class ContactsDataObjects
 
         $this->verifyCompaniesCSV($I, 2, 'Voonix', 'scaddie0@zdnet.com', 'http://statcounter.com');
         $this->verifyCompaniesCSV($I, 3, 'Blognation', 'johnny@blognation.com', 'http://columbia.edu');
-        $this->verifyCompaniesCSV($I, 4, 'Thoughtblab', 'ewardington2@imdb.com', 'https://gizmodo.com');
-        $this->verifyCompaniesCSV($I, 5, 'Kaymbo', 'amagor3@stanford.edu', 'https://multiply.com');
+        $this->verifyCompaniesCSV($I, 4, 'Thoughtblab', 'ewardington2@imdb.com', 'http://gizmodo.com');
+        $this->verifyCompaniesCSV($I, 5, 'Kaymbo', 'amagor3@stanford.edu', 'http://multiply.com');
         $this->verifyCompaniesCSV($I, 6, 'Vipe', 'dmoncrieffe4@prnewswire.com', 'http://hexun.com');
-        $this->verifyCompaniesCSV($I, 7, 'Jaxspan', 'wlouden5@google.ru', 'https://google.pl');
-        $this->verifyCompaniesCSV($I, 8, 'Shuffledrive', 'laubery6@prnewswire.com', 'https://unicef.org');
+        $this->verifyCompaniesCSV($I, 7, 'Jaxspan', 'wlouden5@google.ru', 'http://google.pl');
+        $this->verifyCompaniesCSV($I, 8, 'Shuffledrive', 'laubery6@prnewswire.com', 'http://unicef.org');
         $this->verifyCompaniesCSV($I, 9, 'Tavu', 'civannikovd@dion.ne.jp', '');
         $this->verifyCompaniesCSV($I, 10, 'Meemm', '', '');
-        //$this->verifyCompaniesCSV($I,11,'','dwahnerf@java.com','http://printfriendly.com');
-        //$this->verifyCompaniesCSV($I,11,'','kwenzelg@google.ca','');
-        //$this->verifyCompaniesCSV($I,11,'','','http://vinaora.com');
-        $this->verifyCompaniesCSV($I, 11, 'Blogspan', '', '	https://51.la');
+        $this->verifyCompaniesCSV($I, 11, 'Blogspan', '', 'http://abcd.la');
     }
 
     public function verifyContactCSV(\AcceptanceTester $I, $id, $first, $last, $email, $company, $companyId)
@@ -153,16 +150,10 @@ class ContactsDataObjects
     public function verifyCompaniesCSV(\AcceptanceTester $I, $id, $name, $email, $website)
     {
         $I->amOnPage('s/companies/edit/'.$id);
-        if ($name != '') {
-            $I->canSeeInField('company[companyname]', $name);
-        }
-        if ($email != '') {
-            $I->canSeeInField('company[companyemail]', $email);
-        }
-        if ($website != '') {
-            $text = (substr($website, 0, 5) != 'http:') ? 'http://'.$website : $website;
-            $I->canSeeInField('company[companywebsite]',  $text);
-        }
+        if ($name != '') $I->canSeeInField('company[companyname]', $name);
+        if ($email != '') $I->canSeeInField('company[companyemail]', $email);
+        if ($website != '') $I->canSeeInField('company[companywebsite]',$website);
+
     }
 
     public function noWebsiteContact()
@@ -230,7 +221,7 @@ class ContactsDataObjects
         foreach ($this->company as $key => $data) {
             $I->fillField($key, $data);
         }
-        $this->fillContactCompanyState($I, $state);
+        //$this->fillContactCompanyState($I, $state);
         $this->fillContactCompanyCountry($I, $country);
     }
 
