@@ -38,9 +38,6 @@ class AcceptanceTester extends \Codeception\Actor
        $I->fillField(LoginPage::$password, $_ENV['MAUTIC_ADMIN_PASSWORD']);
        $I->click(LoginPage::$login);
        $I->seeCurrentUrlEquals(DashboardPage::$URL);
-       $I->runShellCommand('php app/console doctrine:migrations:migrate');
-
-       // saving snapshot
        $I->saveSessionSnapshot('login');
    }
 }

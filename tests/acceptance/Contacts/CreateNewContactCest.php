@@ -178,9 +178,8 @@ class CreateNewContactCest
 
     }
 
-    public function  changeCampaign(AcceptanceTester $I){
+    public function changeCampaign(AcceptanceTester $I){
          $I->wantTo("Change a contacts campaign");
-         
     }
 
 

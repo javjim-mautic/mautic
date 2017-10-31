@@ -10,7 +10,7 @@ modules:
              dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
              user: '%DB_USER%'
              password: '%DB_PASSWD%'
-             dump: 'tests/_data/Contacts.sql'
+             dump: '%SQL_DUMP_FILE%'
              populate: true
              cleanup: false
              #reconnect: true
