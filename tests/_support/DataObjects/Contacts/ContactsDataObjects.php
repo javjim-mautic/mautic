@@ -47,8 +47,8 @@ class ContactsDataObjects
             'company[companycity]'               => 'Miami',
             'company[companyzipcode]'            => '33178',
             'company[companyphone]'              => '3055555555',
-            'company[companywebsite]'            => 'www.newbuttoncompany.com',
-            'company[companystate]'              => 'California'];
+            'company[companywebsite]'            => 'www.newbuttoncompany.com'
+            ];
     }
     public function _2NoCompany10Points()
     {
@@ -221,7 +221,7 @@ class ContactsDataObjects
         foreach ($this->company as $key => $data) {
             $I->fillField($key, $data);
         }
-        //$this->fillContactCompanyState($I, $state);
+        $this->fillContactCompanyState($I, $state);
         $this->fillContactCompanyCountry($I, $country);
     }
 
