@@ -5,7 +5,7 @@ use Page\Acceptance\DashboardPage;
 use Page\Acceptance\NewContactPage;
 use Codeception\Module\Cli;
 
-class CreateNewContactCest
+class ContactsCest
 {
     private $contactPageObjects = null;
     public function _before(AcceptanceTester $I)
@@ -69,6 +69,7 @@ class CreateNewContactCest
         $I->waitForText('Edit Company');
         $newContact->verifyContactCompany($I, 'California', 'United States');
     }
+
     public function CreateAContactNoCompany10Points(AcceptanceTester $I)
     {
         $I->wantTo('Create a contact with all fields and no company from new button with 10 points set up');
@@ -154,11 +155,14 @@ class CreateNewContactCest
         $I->canSee('New Button Contact');
         $I->canSee('No Company Contact');
         $I->canSee('2 items,');
+        $I->click('//*[@id="btn-filter"]/i');
+
     }
 
     public function changeSegment(AcceptanceTester $I){
         $I->wantTo('Change a contacts segment');
         $I->amOnPage('/s/contacts');
+        $I->wait(2);
         $I->checkOption('cb1');
         $I->checkOption('cb2');
         $I->click('//*[@id="leadTable"]/thead/tr/th[1]/div/div/button/i');
@@ -166,7 +170,7 @@ class CreateNewContactCest
         $I->click('//*[@id="lead_batch_add_chosen"]/ul');
         $I->click('//*[@id="lead_batch_add_chosen"]/div/ul/li[2]');
         $I->wait(3);
-        $I->click('//*[@id="MauticSharedModal"]/div/div/div[3]/div/button[2]');
+        $I->click(\Page\Acceptance\ModalPage::$SaveButton);
         $I->runShellCommand('php app/console mautic:segments:update');
         $I->wait(12);
         $I->click(DashboardPage::$SegmentsPage);
@@ -175,12 +179,76 @@ class CreateNewContactCest
         $I->wait(3);
         $I->canSee('New Button Contact');
         $I->canSee('No Company Contact');
+        $I->click('//*[@id="btn-filter"]/i');
 
     }
 
     public function changeCampaign(AcceptanceTester $I){
-         $I->wantTo("Change a contacts campaign");
+        $I->wantTo('Change a contacts campaign');
+        $I->amOnPage('/s/contacts');
+        $I->wait(2);
+        $I->checkOption('cb3');
+        $I->click('//*[@id="leadTable"]/thead/tr/th[1]/div/div/button/i');
+        $I->click('Change Campaigns');
+        $I->click('//*[@id="lead_batch_add_chosen"]/ul');
+        $I->click('//*[@id="lead_batch_add_chosen"]/div/ul/li[1]');
+        $I->click(\Page\Acceptance\ModalPage::$SaveButton);
+        $I->runShellCommand('php app/console mautic:campaigns:update');
+        $I->runShellCommand('php app/console mautic:campaigns:trigger');
+        $I->amOnPage('/s/contacts/view/3');
+        $I->canSee('25 points');
+        $I->canSee('Campaign action triggered');
+        $I->canSee('Add points / Manually added to campaign');
     }
+
+    public function setToDoNotContact(AcceptanceTester $I){
+        $I->wantTo('Set Contact to DoNotContact');
+        $I->amOnPage('/s/contacts');
+        $I->checkOption('cb4');
+        $I->click('//*[@id="leadTable"]/thead/tr/th[1]/div/div/button/i');
+        $I->click('Set Do Not Contact');
+        $I->waitForText('Reason');
+        $I->fillField('lead_batch_dnc[reason]','No reason');
+        $I->click(\Page\Acceptance\ModalPage::$SaveButton);
+        $I->amOnPage('/s/contacts/view/4');
+        $I->canSee('Do Not Contact');
+    }
+    public function sendEmailToDoNotContact(AcceptanceTester $I){
+        //Todo implement https://github.com/WhatDaFox/Codeception-Mailtrap
+    }
+    public function editContact(AcceptanceTester $I){
+        $I->wantTo('Edit a Contact');
+        $I->amOnPage('/s/contacts');
+        $I->checkOption('cb5');
+        $I->click('//*[@id="leadTable"]/tbody/tr[5]/td[1]/div/div/button/i');
+        $I->click('//*[@id="leadTable"]/tbody/tr[5]/td[1]/div/div/ul/li[1]/a/span/i');
+        $I->waitForText('Preferred profile image');
+        $I->fillField('lead[lastname]','Edited Last');
+        $I->click('Save & Close');
+        $I->waitForText('Engagements');
+        $I->canSee('Edited Last');
+
+
+    }
+    public function removeContact(AcceptanceTester $I){
+//        $I->wantTo('Delete a Contact');
+//        $I->amOnPage('/s/contacts');
+//        $I->checkOption('cb6');
+//        $I->click('//*[@id="leadTable"]/tbody/tr[6]/td[1]/div/div/button/i');
+//        $I->click('Delete');
+//        $I->click('Delete');
+
+    }
+    public function quickAddContact(AcceptanceTester $I){
+
+    }
+    public function allTypesContactCustomFields(AcceptanceTester $I){
+
+    }
+
+
+
+
 
 
 
