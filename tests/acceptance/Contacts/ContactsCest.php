@@ -231,15 +231,29 @@ class ContactsCest
 
     }
     public function removeContact(AcceptanceTester $I){
-//        $I->wantTo('Delete a Contact');
-//        $I->amOnPage('/s/contacts');
-//        $I->checkOption('cb6');
-//        $I->click('//*[@id="leadTable"]/tbody/tr[6]/td[1]/div/div/button/i');
-//        $I->click('Delete');
-//        $I->click('Delete');
-
+        $I->wantTo('Delete a Contact');
+        $I->amOnPage('/s/contacts');
+        $I->checkOption('cb6');
+        $I->click('//*[@id="leadTable"]/tbody/tr[6]/td[1]/div/div/button/i');
+        $I->click('//*[@id="leadTable"]/tbody/tr[6]/td[1]/div/div/ul/li[2]/a/span/span');
+        $I->click('/html/body/div[4]/div/div/div[2]/button[2]');
+        $I->amOnPage('/s/contacts/view/6');
+        $I->canSee('No contact with an id of 6 was found!');
     }
+
     public function quickAddContact(AcceptanceTester $I){
+        $I->wantTo("Add a contact via QuickAdd");
+        $I-> amOnPage('/s/contacts');
+        $I->click('Quick Add');
+        $I->wait(3);
+        $I->fillField('lead[firstname]', 'QuickAdd');
+        $I->fillField('lead[lastname]', 'Contact');
+        $I->fillField('lead[email]', 'quick@mailinator.com');
+        $I->click('//div[@class="modal-form-buttons"]/button[2]');
+        $I->amOnPage('/s/contacts/view/24');
+        $I->canSee('Quick Add');
+        $I->canSee('Contact');
+        $I->canSee('quick@mailinator.com');
 
     }
     public function allTypesContactCustomFields(AcceptanceTester $I){
